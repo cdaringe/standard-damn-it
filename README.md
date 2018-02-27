@@ -4,7 +4,7 @@
 
 automatically update a npm-based project to force all committed code to be formatted with standard.
 
-wires in [prettier-standard](https://www.npmjs.com/package/prettier-standard), the standard autoformatter, and triggers formatting automatically with `githooks`.
+wires in [prettier-standard](https://www.npmjs.com/package/prettier-standard), the standard autoformatter, and triggers formatting automatically with `githooks`.  by default uses npm, but if a yarn.lock file is found, yarn will be used to install dependencies.
 
 ## usage
 
