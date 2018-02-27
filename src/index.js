@@ -3,6 +3,7 @@ var fs = require('fs-extra')
 var path = require('path')
 var execa = require('execa')
 var TO_INSTALL_DEV_PACKAGES = ['prettier-standard', 'lint-staged', 'husky']
+
 async function damnIt ({ srcGlob, packager }) {
   var packageFilename = await pkgUp()
   var root = path.dirname(packageFilename)
