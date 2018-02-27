@@ -54,6 +54,7 @@ async function damnIt ({
     Object.assign(pkg, injectLintStage)
   }
   await fs.writeFile(packageFilename, pkg)
+  await execa(packager, packagerArgs, { cwd: root, stdio: 'inherit' })
 }
 
 module.exports = damnIt
