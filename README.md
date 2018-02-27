@@ -1,5 +1,7 @@
 # standard-damn-it
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cdaringe/standard-damn-it.svg)](https://greenkeeper.io/)
+
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 automatically update a npm-based project to force all committed code to be formatted with standard.
