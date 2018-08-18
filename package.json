@@ -1,6 +1,6 @@
 {
   "name": "standard-damn-it",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "bin": "src/bin.js",
   "main": "src/index.js",
   "license": "MIT",
@@ -11,7 +11,8 @@
   },
   "scripts": {
     "format": "prettier-standard 'src/**/*.js'",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "lint": "standard"
   },
   "lint-staged": {
     "linters": {
@@ -23,8 +24,9 @@
   },
   "devDependencies": {
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
-    "prettier-standard": "^8.0.0"
+    "lint-staged": "^7.2.2",
+    "prettier-standard": "^8.0.1",
+    "standard": "^11.0.1"
   },
   "repository": "git@github.com:cdaringe/standard-damn-it.git",
   "author": "cdaringe <christopher.dieringer@gmail.com>"

@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 var srcGlob = process.argv[2] ? process.argv[2] : 'src/**/*.js'
 var damnit = require('./')
 damnit({

@@ -2,7 +2,12 @@ var pkgUp = require('pkg-up')
 var fs = require('fs-extra')
 var path = require('path')
 var execa = require('execa')
-var TO_INSTALL_DEV_PACKAGES = ['prettier-standard', 'lint-staged', 'husky']
+var TO_INSTALL_DEV_PACKAGES = [
+  'prettier-standard',
+  'lint-staged',
+  'husky',
+  'standard'
+]
 
 async function damnIt ({ srcGlob, packager }) {
   var packageFilename = await pkgUp()
@@ -53,6 +58,13 @@ async function damnIt ({ srcGlob, packager }) {
     }
   } else {
     pkg.scripts.precommit = 'lint-staged'
+  }
+  if (pkg.scripts.lint) {
+    console.warn(
+      `[standard-damn-it] package already has "lint" script. skipping`
+    )
+  } else {
+    pkg.scripts.lint = 'standard'
   }
   if (pkg['lint-staged']) {
     console.warn(
