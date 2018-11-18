@@ -1,31 +1,36 @@
 {
   "name": "standard-damn-it",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "bin": "src/bin.js",
   "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
     "execa": "^0.9.0",
     "fs-extra": "^5.0.0",
+    "meow": "^5.0.0",
     "pkg-up": "^2.0.0"
   },
   "scripts": {
-    "format": "prettier-standard 'src/**/*.js'",
-    "precommit": "lint-staged"
+    "format": "prettier-standard '{src,test}/**/*.js'"
+  },
+  "devDependencies": {
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.5",
+    "prettier-standard": "^8.0.1"
+  },
+  "repository": "git@github.com:cdaringe/standard-damn-it.git",
+  "author": "cdaringe <christopher.dieringer@gmail.com>",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "linters": {
-      "src/**/*.js": [
-        "prettier-standard",
+      "{src,test,scripts}/**/*.{js,jsx,ts,tsx}": [
+        "yarn format",
         "git add"
       ]
     }
-  },
-  "devDependencies": {
-    "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
-    "prettier-standard": "^8.0.0"
-  },
-  "repository": "git@github.com:cdaringe/standard-damn-it.git",
-  "author": "cdaringe <christopher.dieringer@gmail.com>"
+  }
 }

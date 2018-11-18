@@ -19,7 +19,7 @@ async function damnIt ({ srcGlob, packager }) {
   var injectLintStage = {
     'lint-staged': {
       linters: {
-        [srcGlob]: ['prettier-standard', 'git add']
+        [srcGlob]: [isYarn ? 'yarn format' : 'npm run format', 'git add']
       }
     }
   }
@@ -44,15 +44,24 @@ async function damnIt ({ srcGlob, packager }) {
     pkg.scripts[injectScriptFormatKey] =
       pkg.scripts[injectScriptFormatKey] || injectScriptFormatValue
   }
-  if (pkg.scripts.precommit) {
-    if (!(pkg.scripts.precommit.match && pkg.scripts.precommit.match(/lint/))) {
+  if (pkg.husky) {
+    if (
+      !(
+        pkg.husky.hooks['pre-commit'] &&
+        pkg.husky.hooks['pre-commit'].match &&
+        pkg.husky.hooks['pre-commit'].match(/lint/)
+      )
+    ) {
       console.error(
-        `[standard-damn-it] precommit hook already present, missing lint-staged`
+        `[standard-damn-it] pre-commit hook already present, missing lint-staged`
       )
       process.exit(1)
     }
   } else {
-    pkg.scripts.precommit = 'lint-staged'
+    pkg.husky = {
+      ...{ hooks: { 'pre-commit': 'lint-staged' } },
+      ...(pkg.husky || {})
+    }
   }
   if (pkg['lint-staged']) {
     console.warn(
