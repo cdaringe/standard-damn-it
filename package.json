@@ -1,6 +1,6 @@
 {
   "name": "standard-damn-it",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "bin": "src/bin.js",
   "main": "src/index.js",
   "license": "MIT",
@@ -32,5 +32,6 @@
         "git add"
       ]
     }
-  }
+  },
+  "keywords": ["standard", "standardjs", "typescript", "format", "formatter", "damn", "it"]
 }
