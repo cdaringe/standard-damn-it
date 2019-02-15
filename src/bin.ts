@@ -25,9 +25,11 @@ var cli = require('meow')(
   }
 )
 
-if (cli.flags.h) return cli.showHelp()
-
-var damnit = require('./')
-damnit({
-  srcGlob: cli.flags.glob
-})
+if (cli.flags.h) {
+  cli.showHelp()
+} else {
+  var damnit = require('./')
+  damnit({
+    srcGlob: cli.flags.glob
+  })
+}

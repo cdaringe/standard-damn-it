@@ -2,9 +2,20 @@ var pkgUp = require('pkg-up')
 var fs = require('fs-extra')
 var path = require('path')
 var execa = require('execa')
-var TO_INSTALL_DEV_PACKAGES = ['prettier-standard', 'lint-staged', 'husky']
+var TO_INSTALL_DEV_PACKAGES = [
+  'prettier-standard',
+  'standard',
+  'lint-staged',
+  'husky'
+]
 
-async function damnIt ({ srcGlob, packager }) {
+async function damnIt ({
+  srcGlob,
+  packager
+}: {
+  srcGlob: string
+  packager: string
+}) {
   var packageFilename = await pkgUp()
   var root = path.dirname(packageFilename)
   var packagerArgs
@@ -19,14 +30,18 @@ async function damnIt ({ srcGlob, packager }) {
   var injectLintStage = {
     'lint-staged': {
       linters: {
-        [srcGlob]: [isYarn ? 'yarn format' : 'npm run format', 'git add']
+        [srcGlob]: [
+          isYarn ? 'yarn format' : 'npm run format',
+          isYarn ? 'yarn lint' : 'npm run lint',
+          'git add'
+        ]
       }
     }
   }
   var injectScriptFormatKey = 'format'
   var injectScriptFormatValue = `prettier-standard '${srcGlob}'`
 
-  var pkg
+  var pkg: any = {}
   try {
     pkg = require(packageFilename)
   } catch (err) {
@@ -35,6 +50,8 @@ async function damnIt ({ srcGlob, packager }) {
     )
     process.exit(1)
   }
+  var isTypescript = !!Object.assign({}, pkg.dependencies, pkg.devDependencies)
+    .typescript
   pkg.scripts = pkg.scripts || {}
   if (pkg.scripts[injectScriptFormatKey]) {
     console.warn(
@@ -43,6 +60,13 @@ async function damnIt ({ srcGlob, packager }) {
   } else {
     pkg.scripts[injectScriptFormatKey] =
       pkg.scripts[injectScriptFormatKey] || injectScriptFormatValue
+  }
+  if (pkg.scripts.lint) {
+    console.warn(
+      `[standard-damn-it] package already has "lint" script. skipping.`
+    )
+  } else {
+    pkg.scripts.lint = pkg.scripts.lint || `standard '${srcGlob}'`
   }
   if (pkg.husky) {
     if (
@@ -69,6 +93,27 @@ async function damnIt ({ srcGlob, packager }) {
     )
   } else {
     Object.assign(pkg, injectLintStage)
+  }
+
+  if (isTypescript) {
+    var standardConfig = (pkg.standard = pkg.standard || {})
+    var tsparser = '@typescript-eslint/parser'
+    if (standardConfig.parser && standardConfig.parser !== tsparser) {
+      console.warn(`ts project already has parser: ${standardConfig.parser}`)
+    } else {
+      standardConfig.parser = tsparser
+      TO_INSTALL_DEV_PACKAGES.push(tsparser)
+    }
+    standardConfig.standardPlugins = standardConfig.standardPlugins || []
+    standardConfig.standardPlugins = standardConfig.standardPlugins.filter(
+      (key: string) => key !== 'typescript'
+    )
+    standardConfig.standardPlugins.push('typescript')
+    standardConfig.ignore = standardConfig.ignore || []
+    standardConfig.ignore = standardConfig.ignore.filter(
+      (key: string) => key !== '**/*.d.ts'
+    )
+    standardConfig.ignore.push('**/*.d.ts')
   }
   await fs.writeFile(packageFilename, JSON.stringify(pkg, null, 2))
   await execa(packager, packagerArgs.concat(TO_INSTALL_DEV_PACKAGES), {
