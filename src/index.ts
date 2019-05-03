@@ -50,8 +50,8 @@ async function damnIt ({
     )
     process.exit(1)
   }
-  var isTypescript = !!Object.assign({}, pkg.dependencies, pkg.devDependencies)
-    .typescript
+  const combinedDeps = Object.assign({}, pkg.dependencies, pkg.devDependencies)
+  var isTypescript = !!combinedDeps.typescript || combinedDeps['ts-node']
   pkg.scripts = pkg.scripts || {}
   if (pkg.scripts[injectScriptFormatKey]) {
     console.warn(
@@ -66,7 +66,7 @@ async function damnIt ({
       `[standard-damn-it] package already has "lint" script. skipping.`
     )
   } else {
-    pkg.scripts.lint = pkg.scripts.lint || `standard '${srcGlob}'`
+    pkg.scripts.lint = pkg.scripts.lint || `standard '${srcGlob}' --fix`
   }
   if (pkg.husky) {
     if (
