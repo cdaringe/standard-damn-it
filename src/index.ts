@@ -104,11 +104,11 @@ async function damnIt ({
       standardConfig.parser = tsparser
       TO_INSTALL_DEV_PACKAGES.push(tsparser)
     }
-    standardConfig.standardPlugins = standardConfig.standardPlugins || []
-    standardConfig.standardPlugins = standardConfig.standardPlugins.filter(
-      (key: string) => key !== 'typescript'
+    standardConfig.plugins = standardConfig.plugins || []
+    standardConfig.plugins = standardConfig.plugins.filter(
+      (key: string) => key !== '@typescript-eslint/eslint-plugin'
     )
-    standardConfig.standardPlugins.push('typescript')
+    standardConfig.plugins.push('@typescript-eslint/eslint-plugin')
     standardConfig.ignore = standardConfig.ignore || []
     standardConfig.ignore = standardConfig.ignore.filter(
       (key: string) => key !== '**/*.d.ts'
