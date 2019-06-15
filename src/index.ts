@@ -2,12 +2,6 @@ var pkgUp = require('pkg-up')
 var fs = require('fs-extra')
 var path = require('path')
 var execa = require('execa')
-var TO_INSTALL_DEV_PACKAGES = [
-  'prettier-standard',
-  'standard',
-  'lint-staged',
-  'husky'
-]
 
 async function damnIt ({
   srcGlob,
@@ -50,8 +44,11 @@ async function damnIt ({
     )
     process.exit(1)
   }
+  var TO_INSTALL_DEV_PACKAGES = ['prettier-standard', 'lint-staged', 'husky']
   const combinedDeps = Object.assign({}, pkg.dependencies, pkg.devDependencies)
   var isTypescript = !!combinedDeps.typescript || combinedDeps['ts-node']
+  const standardBinPkgName = isTypescript ? 'standardx' : 'standard'
+  TO_INSTALL_DEV_PACKAGES.push(standardBinPkgName)
   pkg.scripts = pkg.scripts || {}
   if (pkg.scripts[injectScriptFormatKey]) {
     console.warn(
@@ -66,7 +63,8 @@ async function damnIt ({
       `[standard-damn-it] package already has "lint" script. skipping.`
     )
   } else {
-    pkg.scripts.lint = pkg.scripts.lint || `standard '${srcGlob}' --fix`
+    pkg.scripts.lint =
+      pkg.scripts.lint || `${standardBinPkgName} '${srcGlob}' --fix`
   }
   if (pkg.husky) {
     if (
@@ -96,7 +94,13 @@ async function damnIt ({
   }
 
   if (isTypescript) {
-    var standardConfig = (pkg.standard = pkg.standard || {})
+    console.log(
+      '[standard-damn-it] adding no-unused-vars rule due to eslint-typescript parser bugs'
+    )
+    var eslintConfig = (pkg.eslintConfig = pkg.eslintConfig || {})
+    var eslintConfigRules = (eslintConfig.rules = eslintConfig.rules || {})
+    eslintConfigRules['no-unused-vars'] = 0
+    var standardConfig = (pkg.standardx = pkg.standardx || {})
     var tsparser = '@typescript-eslint/parser'
     if (standardConfig.parser && standardConfig.parser !== tsparser) {
       console.warn(`ts project already has parser: ${standardConfig.parser}`)

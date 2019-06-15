@@ -1,6 +1,6 @@
 {
   "name": "standard-damn-it",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "bin": "src/bin.js",
   "main": "src/index.js",
   "license": "MIT",
@@ -37,7 +37,10 @@
     "format",
     "formatter",
     "damn",
-    "it"
+    "it",
+    "config",
+    "setup",
+    "lint"
   ],
   "standard": {
     "parser": "@typescript-eslint/parser",

@@ -2,6 +2,8 @@
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+single command setup for a complete [standardjs](https://standardjs.com/) lint & format experience for javascript & typescript projects.
+
 configure your project to:
 
 - format with standard-prettier
