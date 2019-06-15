@@ -1,6 +1,6 @@
 {
   "name": "standard-damn-it",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "bin": "src/bin.js",
   "main": "src/index.js",
   "license": "MIT",
