@@ -75,7 +75,7 @@ async function damnIt ({
       console.error(
         `[standard-damn-it] pre-commit hook already present, missing lint-staged`
       )
-      process.exit(1)
+      // process.exit(1)
     }
   } else {
     pkg.husky = {
