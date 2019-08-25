@@ -23,13 +23,11 @@ async function damnIt ({
   }
   var injectLintStage = {
     'lint-staged': {
-      linters: {
-        [srcGlob]: [
-          isYarn ? 'yarn format' : 'npm run format',
-          isYarn ? 'yarn lint' : 'npm run lint',
-          'git add'
-        ]
-      }
+      [srcGlob]: [
+        isYarn ? 'yarn format' : 'npm run format',
+        isYarn ? 'yarn lint' : 'npm run lint',
+        'git add'
+      ]
     }
   }
   var injectScriptFormatKey = 'format'
@@ -112,6 +110,7 @@ async function damnIt ({
     standardConfig.plugins = standardConfig.plugins.filter(
       (key: string) => key !== '@typescript-eslint/eslint-plugin'
     )
+    TO_INSTALL_DEV_PACKAGES.push('@typescript-eslint/eslint-plugin')
     standardConfig.plugins.push('@typescript-eslint/eslint-plugin')
     standardConfig.ignore = standardConfig.ignore || []
     standardConfig.ignore = standardConfig.ignore.filter(
